@@ -6,19 +6,26 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:36:41 by nicolas           #+#    #+#             */
-/*   Updated: 2023/08/23 10:09:00 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/08/23 12:28:14 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <iostream>
 #include <string>
 #include <fstream>
 
-static bool	verify_arguments(int argc)
+static bool	verify_arguments(int argc, char **argv)
 {
 	if (argc != 4)
 	{
 		std::cerr << "\033[36m";
 		std::cerr << "Usage: ./replace <filename> <string1> <string2>";
+		std::cerr << "\033[0m" << std::endl;
+		return (1);
+	}
+	if (!*argv[2])
+	{
+		std::cerr << "\033[31m";
+		std::cerr << "Error: an empty string cannot be targeted.";
 		std::cerr << "\033[0m" << std::endl;
 		return (1);
 	}
@@ -31,7 +38,7 @@ static bool	open_files(std::fstream &infile,
 	infile.open(filename.c_str());
 	if (infile.fail())
 	{
-		std::cerr << "\033[36m";
+		std::cerr << "\033[31m";
 		std::cerr << "Error: " << filename << " isn't available";
 		if (errno == EACCES)
 			std::cerr << " (Permission denied)";
@@ -42,13 +49,12 @@ static bool	open_files(std::fstream &infile,
 	outfile.open(filename.c_str());
 	if (outfile.fail())
 	{
-		infile.close();
-		std::cerr << "\033[36m";
+		std::cerr << "\033[31m";
 		std::cerr << "Error: " << filename << " isn't available";
 		if (errno == EACCES)
 			std::cerr << " (Permission denied)";
 		std::cerr << "\033[0m" << std::endl;
-		return (1);
+		return (infile.close(), 1);
 	}
 	return (0);
 }
@@ -83,7 +89,7 @@ int	main(int argc, char **argv)
 	std::string		substring;
 	std::string		replacement;
 
-	if (verify_arguments(argc))
+	if (verify_arguments(argc, argv))
 		return (1);
 	filename = argv[1];
 	if (open_files(infile, outfile, filename))

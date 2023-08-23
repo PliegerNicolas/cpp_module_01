@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 22:38:18 by nicolas           #+#    #+#             */
-/*   Updated: 2023/06/06 00:38:08 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/08/23 12:13:55 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "Harl.hpp"
@@ -57,13 +57,10 @@ void	Harl::complain(std::string level)
 	{
 		case 0:
 			(this->*f[i++])();
-			break ;
 		case 1:
 			(this->*f[i++])();
-			break ;
 		case 2:
 			(this->*f[i++])();
-			break ;
 		case 3:
 			(this->*f[i++])();
 			break ;
